@@ -111,6 +111,11 @@ namespace XIVSlothComboPlugin.Combos
                 var valorDebuffonTarget = TargetHasEffect(PLD.Debuffs.BladeOfValor);
                 var interveneCD = GetCooldown(PLD.Intervene);
                 var actionIDCD = GetCooldown(actionID);
+
+                if (CustomCombo.CanInterruptEnemy() && !GetCooldown(All.Interject).IsCooldown) {
+                    return All.Interject;
+                }
+                
                 if (IsEnabled(CustomComboPreset.PaladinInterveneFeature) && level >= 74)
                 {
                     if (interveneCD.CooldownRemaining < 30 && actionIDCD.CooldownRemaining > 0.7)

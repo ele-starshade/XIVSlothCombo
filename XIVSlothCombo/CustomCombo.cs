@@ -6,6 +6,7 @@ using Dalamud.Game.ClientState.JobGauge.Types;
 using Dalamud.Game.ClientState.Objects.SubKinds;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Game.ClientState.Statuses;
+using Dalamud.Game.ClientState.Party;
 using Dalamud.Utility;
 
 namespace XIVSlothComboPlugin.Combos

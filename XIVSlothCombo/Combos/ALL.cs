@@ -18,7 +18,8 @@ namespace XIVSlothComboPlugin.Combos
             WiseToTheWorldMIN = 26521,
             WiseToTheWorldBTN = 26522,
             LowBlow = 7540,
-            Interject = 7538;
+            Interject = 7538,
+            HeadGraze = 7551;
 
         public static class Buffs
         {
