@@ -204,7 +204,7 @@ namespace XIVSlothComboPlugin
         BardRemoveApexArrowFeature = 221,
 
         [DependentCombos(SimpleBardFeature)]
-        [CustomComboInfo("Simple Opener", "Adds the optimum opener to simple bard", BRD.JobID, BRD.HeavyShot, BRD.BurstShot)]
+        [CustomComboInfo("Simple Opener", "BETA TESTING - Adds the optimum opener to simple bard.", BRD.JobID, BRD.HeavyShot, BRD.BurstShot)]
         BardSimpleOpener = 222,
 
         #endregion
