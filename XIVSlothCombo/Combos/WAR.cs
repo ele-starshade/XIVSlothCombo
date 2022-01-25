@@ -14,6 +14,7 @@ namespace XIVSlothComboPlugin.Combos
             Overpower = 41,
             StormsPath = 42,
             StormsEye = 45,
+            Tomahawk = 46,
             InnerBeast = 49,
             SteelCyclone = 51,
             Infuriate = 52,
@@ -81,6 +82,11 @@ namespace XIVSlothComboPlugin.Combos
                 var surgingtempestBuff = HasEffect(WAR.Buffs.SurgingTempest);
                 var gauge = GetJobGauge<WARGauge>().BeastGauge;
 
+                if (IsEnabled(CustomComboPreset.WARRangedUptimeFeature) && level >= 15)
+                {
+                    if (!InMeleeRange(true))
+                        return WAR.Tomahawk;
+                }
                 if (IsEnabled(CustomComboPreset.WarriorInnerChaosOption) && HasEffect(WAR.Buffs.NascentChaos) && HasEffect(WAR.Buffs.SurgingTempest) && gauge >= 50 && level >= 80)
                     return WAR.InnerChaos;
 
@@ -291,6 +297,23 @@ namespace XIVSlothComboPlugin.Combos
                 return OriginalHook(actionID);
 
 
+            }
+
+            return actionID;
+        }
+    }
+    internal class WarriorInfuriateFeature : CustomCombo
+    {
+        protected override CustomComboPreset Preset => CustomComboPreset.WarriorInfuriateFeature;
+
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+        {
+            if (actionID == WAR.Infuriate)
+            {
+                if (HasEffect(WAR.Buffs.InnerRelease))
+                    return WAR.FellCleave;
+                if (HasEffect(WAR.Buffs.NascentChaos))
+                    return WAR.InnerChaos;
             }
 
             return actionID;

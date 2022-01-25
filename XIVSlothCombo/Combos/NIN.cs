@@ -12,6 +12,7 @@ namespace XIVSlothComboPlugin.Combos
             GustSlash = 2242,
             Hide = 2245,
             Assassinate = 8814,
+            ThrowingDaggers = 2247,
             Mug = 2248,
             DeathBlossom = 2254,
             AeolianEdge = 2255,
@@ -40,13 +41,15 @@ namespace XIVSlothComboPlugin.Combos
                 Kassatsu = 497,
                 Suiton = 507,
                 Hidden = 614,
+                TenChiJin = 1186,
                 AssassinateReady = 1955,
                 RaijuReady = 2690;
         }
 
         public static class Debuffs
         {
-            // public const short placeholder = 0;
+            public const short
+            TrickAttack = 1054;
         }
 
         public static class Levels
@@ -72,6 +75,11 @@ namespace XIVSlothComboPlugin.Combos
         {
             if (actionID == NIN.AeolianEdge)
             {
+                if (IsEnabled(CustomComboPreset.NinjaRangedUptimeFeature))
+                {
+                    if (!InMeleeRange(true))
+                        return NIN.ThrowingDaggers;
+                }
                 if (CustomCombo.IsEnabled(CustomComboPreset.NinjaGCDNinjutsuFeature) && CustomCombo.OriginalHook(NIN.JinNormal) == CustomCombo.OriginalHook(NIN.Jin))
                 {
                     return CustomCombo.OriginalHook(NIN.Ninjutsu);
@@ -102,6 +110,19 @@ namespace XIVSlothComboPlugin.Combos
                     var bunshinCD = GetCooldown(NIN.Bunshin);
                     if (gauge.Ninki >= 50 && actionIDCD.IsCooldown)
                         return NIN.Bavacakra;
+                }
+                // Probably better to use with trick
+                if(IsEnabled(CustomComboPreset.NinjaDreamWithinADream) && level >= 40)
+                {
+                    var actionIDCD = GetCooldown(actionID);
+                    var gauge = GetJobGauge<NINGauge>();
+                    var assasinateCD = GetCooldown(NIN.Assassinate);
+                    var dreamCD = GetCooldown(NIN.DreamWithinADream);
+                    if (actionIDCD.IsCooldown && !dreamCD.IsCooldown && level >= 56)
+                        return OriginalHook(NIN.DreamWithinADream);
+                    if (actionIDCD.IsCooldown && !assasinateCD.IsCooldown && level >= 40 && level <= 55)
+                        return OriginalHook(NIN.Assassinate);
+
                 }
                 if (comboTime > 0f)
                 {

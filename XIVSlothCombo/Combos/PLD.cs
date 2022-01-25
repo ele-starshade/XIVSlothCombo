@@ -13,6 +13,7 @@ namespace XIVSlothComboPlugin.Combos
             ShieldBash = 16,
             RageOfHalone = 21,
             CircleOfScorn = 23,
+            ShieldLob = 24,
             SpiritsWithin = 29,
             GoringBlade = 3538,
             RoyalAuthority = 3539,
@@ -111,11 +112,23 @@ namespace XIVSlothComboPlugin.Combos
                 var valorDebuffonTarget = TargetHasEffect(PLD.Debuffs.BladeOfValor);
                 var interveneCD = GetCooldown(PLD.Intervene);
                 var actionIDCD = GetCooldown(actionID);
-
-                if (CustomCombo.CanInterruptEnemy() && !GetCooldown(All.Interject).IsCooldown) {
-                    return All.Interject;
+                var riotcd = GetCooldown(actionID);
+                var fofremainingTime = FindEffect(PLD.Buffs.FightOrFlight);
+                if (IsEnabled(CustomComboPreset.PaladinFightOrFlightMainComboFeature))
+                {
+                    if (lastComboMove == PLD.FastBlade && riotcd.CooldownRemaining < 0.5 && riotcd.CooldownRemaining > 0.3 && !foFCD.IsCooldown)
+                        return PLD.FightOrFlight;
                 }
-                
+                if (IsEnabled(CustomComboPreset.PaladinReqMainComboFeature))
+                {
+                    if (HasEffect(PLD.Buffs.FightOrFlight) && fofremainingTime.RemainingTime < 17 && !reqCD.IsCooldown)
+                        return PLD.Requiescat;
+                }
+                if (IsEnabled(CustomComboPreset.PaladinRangedUptimeFeature))
+                {
+                    if (!InMeleeRange(true))
+                        return PLD.ShieldLob;
+                }
                 if (IsEnabled(CustomComboPreset.PaladinInterveneFeature) && level >= 74)
                 {
                     if (interveneCD.CooldownRemaining < 30 && actionIDCD.CooldownRemaining > 0.7)
@@ -168,11 +181,12 @@ namespace XIVSlothComboPlugin.Combos
                     }
                 }
 
+
                 if (comboTime > 0)
                 {
                     if (lastComboMove == PLD.FastBlade)
                         return PLD.RiotBlade;
-                }
+                }                
 
                 if (IsEnabled(CustomComboPreset.PaladinAtonementFeature))
                 {

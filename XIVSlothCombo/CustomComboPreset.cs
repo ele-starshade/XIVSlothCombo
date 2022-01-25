@@ -200,7 +200,7 @@ namespace XIVSlothComboPlugin
         [CustomComboInfo("Simple Interrupt", "Uses interrupt during simple bard rotation if applicable", BRD.JobID, BRD.HeavyShot, BRD.BurstShot)]
         BardSimpleInterrupt = 220,
 
-        [CustomComboInfo("Disable ApexArrow From SimpleBard", "Removes Apex Arrow from SimpleBard Feature.", BRD.JobID, BRD.HeavyShot, BRD.BurstShot)]
+        [CustomComboInfo("Disable ApexArrow From SimpleBard", "Removes Apex Arrow from SimpleBard and AoE Feature.", BRD.JobID, BRD.HeavyShot, BRD.BurstShot)]
         BardRemoveApexArrowFeature = 221,
 
         [DependentCombos(SimpleBardFeature)]
@@ -214,7 +214,7 @@ namespace XIVSlothComboPlugin
         [CustomComboInfo("Fan Dance Combos", "Change Fan Dance and Fan Dance 2 into Fan Dance 3 while flourishing.", DNC.JobID, DNC.FanDance1, DNC.FanDance2)]
         DancerFanDanceCombo = 300,
 
-        [ConflictingCombos(DancerDanceComboCompatibility)]
+        [ConflictingCombos(DancerDanceComboCompatibility, DancerDanceStepComboTest)]
         [CustomComboInfo("Dance Step Combo", "Change Standard Step and Technical Step into each dance step while dancing.", DNC.JobID, DNC.StandardStep, DNC.TechnicalStep)]
         DancerDanceStepCombo = 301,
 
@@ -244,17 +244,31 @@ namespace XIVSlothComboPlugin
         [CustomComboInfo("Overcap Feature", "Adds SaberBlade to Cascade/Windmil combo if you are about to overcap on esprit.", DNC.JobID, DNC.Cascade, DNC.Windmill)]
         DancerOvercapFeature = 307,
 
-        [CustomComboInfo("Overcap Feature Option", "Adds SaberBlade to Cascade if you have at least 50 esprit.", DNC.JobID, DNC.Cascade)]
-        DancerSaberDanceOnMainComboFeature = 308,
+        [CustomComboInfo("Overcap Feature Option", "Adds SaberBlade to Cascade/Windmill if you have at least 50 esprit.", DNC.JobID, DNC.Cascade, DNC.Windmill)]
+        DancerSaberDanceInstantSaberDanceComboFeature = 308,
 
-        [CustomComboInfo("CombinedDanceFeature", "Standard And Technical Dance on one button(StandardStep) Standard>Technical.", DNC.JobID, DNC.StandardStep, DNC.TechnicalStep)]
+        [ConflictingCombos(DancerDanceComboCompatibility, DancerDanceStepCombo)]
+        [CustomComboInfo("CombinedDanceFeature", "Standard And Technical Dance on one button(StandardStep) Standard>Technical This is combo out into Tilana and StarfallDance.", DNC.JobID, DNC.StandardStep, DNC.TechnicalStep)]
         DancerDanceStepComboTest = 309,
 
         [CustomComboInfo("FanSaberDanceFeature", "Adds SaberDance onto all FanDance Skills when no feathers are available and you have 50+ gauge", DNC.JobID, DNC.FanDance1, DNC.FanDance2, DNC.FanDance3, DNC.FanDance4)]
         DancerSaberFanDanceFeature = 310,
 
-        [CustomComboInfo("FanDance On Cascade Feature", "Adds FanDance1/3/4 Onto Cascade When available", DNC.JobID, DNC.Cascade, DNC.FanDance1, DNC.FanDance2, DNC.FanDance3, DNC.FanDance4)]
+        [CustomComboInfo("FanDance On Cascade Feature", "Adds FanDance 1/3/4 Onto Cascade When available", DNC.JobID, DNC.Cascade, DNC.FanDance1, DNC.FanDance2, DNC.FanDance3, DNC.FanDance4)]
         DancerFanDanceOnMainComboFeature = 311,
+
+        [CustomComboInfo("FanDance On Windmill Feature", "Adds FanDance 2/3/4 Onto Windmill When available", DNC.JobID, DNC.Windmill)]
+        DancerFanDanceOnAoEComboFeature = 312,
+
+        [DependentCombos(DancerDanceStepComboTest)]
+        [CustomComboInfo("Devilment On Combined Dance Feature", "Adds Devilment right after Technical finish.", DNC.JobID, DNC.StandardStep, DNC.TechnicalStep)]
+        DancerDevilmentOnCombinedDanceFeature = 313,
+
+        [DependentCombos(DancerDanceStepComboTest)]
+        [CustomComboInfo("Flourish On Combined Dance Feature", "Adds Flourish to the CombinedStepCombo.", DNC.JobID, DNC.StandardStep, DNC.TechnicalStep)]
+        DancerFlourishOnCombinedDanceFeature = 314,
+
+
 
         #endregion
         // ====================================================================================
@@ -306,17 +320,24 @@ namespace XIVSlothComboPlugin
         [CustomComboInfo("oGCD Feature", "Adds Living Shadow>Salted Earth>CarveAndSpit>SaltAndDarkness to CarveAndSpit and AbysalDrain", DRK.JobID, DRK.CarveAndSpit, DRK.AbyssalDrain)]
         DarkoGCDFeature = 506,
 
+        [DependentCombos(DarkoGCDFeature)]
+        [CustomComboInfo("Shadowbringer Feature", "Adds Shadowbringer to oGCD Feature ", DRK.JobID, DRK.CarveAndSpit, DRK.AbyssalDrain)]
+        DarkShadowbringeroGCDFeature = 507,
+
         [ConflictingCombos(DarkPlungeFeatureOption)]
         [CustomComboInfo("Plunge Feature", "Adds Plunge onto main combo whenever its available (Uses all stacks).", DRK.JobID, DRK.Souleater)]
-        DarkPlungeFeature = 507,
+        DarkPlungeFeature = 508,
 
         [ConflictingCombos(DarkPlungeFeature)]
         [CustomComboInfo("Plunge Option", "Adds Plunge onto main combo whenever its available (Leaves 1 stack).", DRK.JobID, DRK.Souleater)]
-        DarkPlungeFeatureOption = 508,
+        DarkPlungeFeatureOption = 509,
 
         [ConflictingCombos(DeliriumFeature)]
         [CustomComboInfo("Delirium Feature Option", "Replaces Souleather with Bloodspiller when Delirium has 10sec or less remaining.", DRK.JobID, DRK.Souleater)]
-        DeliriumFeatureOption = 509,
+        DeliriumFeatureOption = 510,
+
+        [CustomComboInfo("Unmend Uptime Feature", "Replace Souleater Combo Feature with Unmend when you are out of range.", DRK.JobID, DRK.Souleater)]
+        DarkRangedUptimeFeature = 511,
 
         #endregion
         // ====================================================================================
@@ -352,7 +373,8 @@ namespace XIVSlothComboPlugin
         [CustomComboInfo("Ammo Overcap Feature", "Uses Burst Strike/Fated Circle on the respective ST/AoE combos when ammo is about to overcap.", GNB.JobID, GNB.DemonSlaughter)]
         GunbreakerAmmoOvercapFeature = 607,
 
-        [CustomComboInfo("Gnashing Fang Combo", "Replace Gnashing Fang with its combo chain.", GNB.JobID, GNB.GnashingFang)]
+        [ConflictingCombos(GunbreakerNoMercyRotationFeature)]
+        [CustomComboInfo("Gnashing Fang Combo", "Replace Gnashing Fang with its combo chain. Includes DD and other oGCDs.", GNB.JobID, GNB.GnashingFang)]
         GunbreakerGnashingFangCombo = 608,
 
         [CustomComboInfo("BurstStrikeContinuation", "Adds Hypervelocity on Burst Strike Continuation combo and main combo", GNB.JobID, GNB.BurstStrike, GNB.Hypervelocity)]
@@ -361,18 +383,18 @@ namespace XIVSlothComboPlugin
         [CustomComboInfo("Burst Strike to Bloodfest Feature", "Replace Burst Strike with Bloodfest if you have no powder gauge.", GNB.JobID, GNB.BurstStrike)]
         GunbreakerBloodfestOvercapFeature = 610,
 
+        [ConflictingCombos(GunbreakerGnashingFangCombo)]
         [CustomComboInfo("No Mercy Rotation Feature", "Turns No Mercy into the the No Mercy Gnashing Fang Rotation when used. \nCurrently coded for the level 90 burst window.", GNB.JobID, GNB.NoMercy)]
         GunbreakerNoMercyRotationFeature = 611,
 
-        [DependentCombos(GunbreakerSolidBarrelCombo)]
-        [CustomComboInfo("Bow Shock On Main Combo Feature", "Puts Bow Shock on your main combo when it's up during No Mercy.", Combos.GNB.JobID, GNB.BowShock, GNB.SolidBarrel)]
-        GunbreakerBowShockFeature = 614,
+        [CustomComboInfo("Lightning Shot Uptime", "Replace Solid Barrel Combo Feature with Lightning Shot when you are out of range.", GNB.JobID, GNB.SolidBarrel)]
+        GunbreakerRangedUptimeFeature = 612,
 
         #endregion
         // ====================================================================================
         #region MACHINIST
 
-        [CustomComboInfo("(Heated) Shot Combo", "Replace either form of Clean Shot with its combo chain.", MCH.JobID, MCH.CleanShot, MCH.HeatedCleanShot)]
+        [CustomComboInfo("(Heated) Shot Combo", "Replace either form of Clean Shot with its combo chain.", MCH.JobID, MCH.CleanShot, MCH.HeatedCleanShot, MCH.SplitShot, MCH.HeatedSplitShot)]
         MachinistMainCombo = 700,
 
         [CustomComboInfo("Spread Shot/Scattergun Heat, +BioBlaster", "Spread Shot turns into Scattergun when lvl 82 or higher, Both turn into Auto Crossbow when overheated\nand Bioblaster is used first whenever it is off cooldown.", MCH.JobID, MCH.AutoCrossbow, MCH.SpreadShot)]
@@ -392,7 +414,7 @@ namespace XIVSlothComboPlugin
         [CustomComboInfo("Drill/Air/Chain Saw Feature On Main Combo", "Air Anchor followed by Drill is added onto main combo if you use Reassemble.\nIf AirAnchor is on cooldown and you use Reassemble Chain Saw will be added to main combo instead.", MCH.JobID, MCH.Drill, MCH.AirAnchor, MCH.HotShot, MCH.Reassemble)]
         MachinistDrillAirOnMainCombo = 705,
 
-        [CustomComboInfo("Single Button Heat Blast", "Switches Heat Blast to Hypercharge, If Wildfire is off cooldown and you have enough heat for Hypercharge then Hypercharge will be replaced with Wildfire.\nAlso weaves Ricochet/Gauss Round on Heat Blast when necessary.", MCH.JobID, MCH.GaussRound, MCH.Ricochet, MCH.HeatBlast, MCH.Wildfire)]
+        [CustomComboInfo("Single Button Heat Blast", "Switches Heat Blast to Hypercharge.", MCH.JobID, MCH.GaussRound, MCH.Ricochet, MCH.HeatBlast, MCH.Wildfire)]
         MachinistHeatblastGaussRicochetFeature = 706,
 
         [DependentCombos(MachinistMainCombo)]
@@ -427,6 +449,14 @@ namespace XIVSlothComboPlugin
         [DependentCombos(MachinistMainCombo)]
         [CustomComboInfo("Barrel Stabilizer drift protection feature", "Adds Barrel Stabilizer onto the main combo if heat is between 5-20.", MCH.JobID, MCH.BarrelStabilizer)]
         BarrelStabilizerDrift = 714,
+
+        [DependentCombos(MachinistHeatblastGaussRicochetFeature)]
+        [CustomComboInfo("WildFire Feature", "Adds WildFire to the Single Button Heat Blast Feature If Wildfire is off cooldown and you have enough heat for Hypercharge then Hypercharge will be replaced with Wildfire.\nAlso weaves Ricochet/Gauss Round on Heat Blast when necessary.", MCH.JobID, MCH.GaussRound, MCH.Ricochet, MCH.HeatBlast, MCH.Wildfire)]
+        MachinistWildfireFeature = 715,
+
+        [DependentCombos(MachinistSpreadShotFeature)]
+        [CustomComboInfo("BioBlaster Feature", "Adds Bioblaster to the Spreadshot feature", MCH.JobID, MCH.AutoCrossbow, MCH.SpreadShot)]
+        MachinistBioblasterFeature = 716,
 
         #endregion
         // ====================================================================================
@@ -528,6 +558,11 @@ namespace XIVSlothComboPlugin
         [CustomComboInfo("BavacakraOnMainCombo", "Adds Bavacakra you have gauge for it on main combo.", NIN.JobID, NIN.AeolianEdge)]
         NinjaBavacakraFeature = 917,
 
+        [CustomComboInfo("Throwing Dagger Uptime Feature", "Replace Aeolian Edge with Throwing Daggers when targer is our of range.", NIN.JobID, NIN.AeolianEdge)]
+        NinjaRangedUptimeFeature = 918,
+
+        [CustomComboInfo("DreamWithinADream Feature", "Adds Assassinate/DwD onto main combo (Not optimal prob).", NIN.JobID, NIN.AeolianEdge)]
+        NinjaDreamWithinADream = 919,
 
         #endregion
         // ====================================================================================
@@ -571,6 +606,17 @@ namespace XIVSlothComboPlugin
         [CustomComboInfo("Intervene Option", "Adds intervene onto main combo whenever its available (Leaves 1 stack).", PLD.JobID, PLD.RoyalAuthority, PLD.RageOfHalone, PLD.Confiteor)]
         PaladinInterveneFeatureOption = 1011,
 
+        [CustomComboInfo("Shield Lob Uptime Feature", "Replace Royal Authority/Rage of Halone Feature with Shield Lob when out of range.", PLD.JobID, PLD.RoyalAuthority, PLD.RageOfHalone, PLD.Confiteor)]
+        PaladinRangedUptimeFeature = 1012,
+
+        [CustomComboInfo("FoF Feature", "Adds FoF onto the main combo (Testing).", PLD.JobID, PLD.RoyalAuthority, PLD.RageOfHalone, PLD.Confiteor)]
+        PaladinFightOrFlightMainComboFeature = 1013,
+
+        [CustomComboInfo("Req Feature", "Adds Req onto the main combo (Testing).", PLD.JobID, PLD.RoyalAuthority, PLD.RageOfHalone, PLD.Confiteor)]
+        PaladinReqMainComboFeature = 1014,
+
+
+
         #endregion
         // ====================================================================================
         #region RED MAGE
@@ -579,7 +625,7 @@ namespace XIVSlothComboPlugin
         [CustomComboInfo("Red Mage AoE Combo", "Replaces Veraero/Verthunder 2 with Impact when Dualcast or Swiftcast are active.", RDM.JobID, RDM.Veraero2, RDM.Verthunder2)]
         RedMageAoECombo = 1100,
 
-        [CustomComboInfo("Redoublement combo", "Replaces Redoublement with its combo chain, following enchantment rules.", RDM.JobID, RDM.Redoublement)]
+        [CustomComboInfo("Redoublement combo", "Replaces Redoublement with its combo chain, following enchantment rules.", RDM.JobID, RDM.Redoublement, RDM.Zwerchhau, RDM.Riposte)]
         RedMageMeleeCombo = 1101,
 
         [CustomComboInfo("Redoublement Combo Plus", "Replaces Redoublement with Verflare/Verholy after Enchanted Redoublement, whichever is more appropriate.\nRequires Redoublement Combo.", RDM.JobID, RDM.Redoublement)]
@@ -613,6 +659,23 @@ namespace XIVSlothComboPlugin
 
         [CustomComboInfo("oGCD Feature", "Replace Contre Strike and Fleche with whichever is available soonest.", RDM.JobID, RDM.ContreSixte, RDM.Fleche)]
         RedMageOgcdCombo = 1110,
+
+        [CustomComboInfo("SmartCast Opener Feature", "Verthunder Opener Feature. Allows you to prepull with verthunder and still let the combo balance the mana for you", RDM.JobID, RDM.Veraero, RDM.Verthunder, RDM.Verstone, RDM.Verfire)]
+        RedMageVerprocOpenerSmartCastFeature = 1111,
+
+        [DependentCombos(RedMageSmartcastAoECombo)]
+        [CustomComboInfo("Red Mage AoE Finisher", "Adds Finishers onto Moulinet and SmartCast AoE Feature.", RDM.JobID, RDM.EnchantedMoulinet, RDM.Moulinet)]
+        RedMageMeleeAoECombo = 1112,
+
+        [CustomComboInfo("Engagement Feature", "Adds Engagement in all melee combos. (Testing Only!)", RDM.JobID, RDM.EnchantedMoulinet, RDM.Moulinet, RDM.Redoublement, RDM.Zwerchhau, RDM.Riposte)]
+        RedMageEngagementFeature = 1113,
+
+        [CustomComboInfo("Simple Red Mage Single Target", "Combines Ranged and melee combo into one button(Veraero,Verthunder,Verstone,Verfire).\n (Testing Only!!! Disable Everything else other than SimpleFeatures!)", RDM.JobID, RDM.Veraero, RDM.Verthunder, RDM.Verstone, RDM.Verfire)]
+        SimpleRedMage = 1114,
+
+        [CustomComboInfo("Simple Red Mage AoE", "Combines Ranged and melee combo into one button(Veraero2,Verthunder2). \n (Testing Only!!! Disable Everything else other than SimpleFeatures!)", RDM.JobID, RDM.Veraero2, RDM.Verthunder2)]
+        SimpleRedMageAoE = 1115,
+
 
         #endregion
         // ====================================================================================
@@ -725,7 +788,8 @@ namespace XIVSlothComboPlugin
         // ====================================================================================
         #region SUMMONER
 
-        [CustomComboInfo("Enable Single Target", "Enables changing Single-Target Combo (Ruin III).", SMN.JobID, SMN.Ruin3, SMN.Deathflare)]
+        [ConflictingCombos(SummonerMainComboFeatureRuin1)]
+        [CustomComboInfo("Enable Single Target (RuinIII)", "Enables changing Single-Target Combo (Ruin III).", SMN.JobID, SMN.Ruin3, SMN.Deathflare)]
         SummonerMainComboFeature = 1400,
 
         [CustomComboInfo("Enable AOE", "Enables changing AOE Combo (Tri-Disaster)", SMN.JobID, SMN.Tridisaster, SMN.Deathflare)]
@@ -739,16 +803,16 @@ namespace XIVSlothComboPlugin
         [CustomComboInfo("AOE Demi Feature", "Replaces Astral Flare/Brand of Purgatory with Enkindle/Deathflare/Rekindle when appropriate.", SMN.JobID, SMN.Ruin3)]
         SummonerAOEDemiFeature = 1403,
         
-        [CustomComboInfo("Egi Attacks Feature", "Replaces Ruin III and Tri-Disaster with Egi attacks. Will not work without enabling Single Target and/or AOE.", SMN.JobID, SMN.Fester, SMN.EnergyDrain, SMN.Ruin4)]
+        [CustomComboInfo("Egi Attacks Feature", "Replaces RuinI/Ruin III (Depending On Enabeled Combo) and Tri-Disaster with Egi attacks. Will not work without enabling Single Target and/or AOE.", SMN.JobID, SMN.Fester, SMN.EnergyDrain, SMN.Ruin4)]
         SummonerEgiAttacksFeature = 1404,
 
-        [CustomComboInfo("Garuda Slipstream Feature", "Adds Slipstream on Ruin III/Tri-disaster.", SMN.JobID, SMN.Ruin3)]
+        [CustomComboInfo("Garuda Slipstream Feature", "Adds Slipstream on RuinI/Ruin III/Tri-disaster.", SMN.JobID, SMN.Ruin3)]
         SummonerGarudaUniqueFeature = 1405,
 
-        [CustomComboInfo("Ifrit Cyclone Feature", "Adds Crimson Cyclone/Crimson Strike on Ruin III/Tri-disaster.", SMN.JobID, SMN.Ruin3)]
+        [CustomComboInfo("Ifrit Cyclone Feature", "Adds Crimson Cyclone/Crimson Strike on RuinI/Ruin III/Tri-disaster.", SMN.JobID, SMN.Ruin3)]
         SummonerIfritUniqueFeature = 1406,
 
-        [CustomComboInfo("Titan Mountain Buster Feature", "Adds Mountain Buster on Ruin III/Tri-disaster.", SMN.JobID, SMN.Ruin3)]
+        [CustomComboInfo("Titan Mountain Buster Feature", "Adds Mountain Buster on RuinI/Ruin III/Tri-disaster.", SMN.JobID, SMN.Ruin3)]
         SummonerTitanUniqueFeature = 1407,
 
         [CustomComboInfo("ED Fester", "Change Fester into Energy Drain when our of Aetherflow stacks.", SMN.JobID, SMN.Fester)]
@@ -762,57 +826,59 @@ namespace XIVSlothComboPlugin
         [CustomComboInfo("Carbuncle Reminder Feature", "Reminds you always to summon Carbuncle by replacing Ruin (Carbuncle Summon Reminder Feature).", SMN.JobID, SMN.SummonCarbuncle, SMN.Ruin, SMN.Ruin2, SMN.Ruin3)]
         SummonerCarbuncleSummonFeature = 1410,
 
-        [CustomComboInfo("Ruin 4 On Ruin3 Combo Feature", "Adds Ruin4 on main Ruin3 combo feature when there are currently no summons being active.", SMN.JobID, SMN.Ruin, SMN.Ruin2, SMN.Ruin3, SMN.Ruin4)]
+        [CustomComboInfo("Ruin 4 On Ruin3 Combo Feature", "Adds Ruin4 on main RuinI/RuinIII combo feature when there are currently no summons being active.", SMN.JobID, SMN.Ruin, SMN.Ruin2, SMN.Ruin3, SMN.Ruin4)]
         SummonerRuin4ToRuin3Feature = 1411,
 
         [CustomComboInfo("Ruin 4 On Tri-disaster Feature", "Adds Ruin4 on main Tridisaster combo feature when there are currently no summons being active.", SMN.JobID, SMN.Tridisaster)]
         SummonerRuin4ToTridisasterFeature = 1412,
 
-        [CustomComboInfo("Earlier Demi Weave Feature", "Allows to weave Enkindle right after summoning Demi. (Looks like Enkindle Bahamut for both Demis)", SMN.JobID, SMN.Ruin3, SMN.Ruin4, SMN.Tridisaster)]
-        SummonerEnkindleWeave = 1413,
-
-        [CustomComboInfo("Ruin IV Fester Feature", "Change Fester into Ruin IV when out of Aetherflow stacks, ED/ES is on cooldown, and Ruin IV is up.", SMN.JobID, SMN.Painflare)]
-        SummonerFesterPainflareRuinFeature = 1414,
+        [DependentCombos(SummonerEDFesterCombo, SummonerESPainflareCombo)]
+        [CustomComboInfo("Ruin IV Fester/PainFlare Feature", "Change Fester/PainFlare into Ruin IV when out of Aetherflow stacks, ED/ES is on cooldown, and Ruin IV is up.", SMN.JobID, SMN.Painflare, SMN.Fester)]
+        SummonerFesterPainflareRuinFeature = 1413,
 
         [CustomComboInfo("Lazy Fester Feature", "Adds Fester during GCDs of most skills (Ruin3/Ruin4/AstralImpulse/FountainOfFire).\nKeep in mind that for optimal fester usage you should only use it when you have Searing Light, and not every time it comes up.", SMN.JobID, SMN.Ruin3, SMN.Ruin4, SMN.AstralImpulse, SMN.FountainOfFire)]
-        SummonerLazyFesterFeature = 1415,
+        SummonerLazyFesterFeature = 1414,
 
         [ConflictingCombos(SimpleSummonerOption2)]
-        [CustomComboInfo("One Button Rotation Feature", "Summoner Single Target One Button Rotation (Single Target) on Ruin3.(Titan>Garuda>Ifrit) ", SMN.JobID, SMN.Ruin3, SMN.Deathflare)]
-        SimpleSummoner = 1416,
+        [CustomComboInfo("One Button Rotation Feature", "Summoner Single Target One Button Rotation (Single Target) on Ruin1/Ruin3.(Titan>Garuda>Ifrit) ", SMN.JobID, SMN.Ruin3, SMN.Deathflare)]
+        SimpleSummoner = 1415,
 
         [CustomComboInfo("One Button AoE Rotation Feature", "Summoner AoE One Button Rotation (AoE) on Tridisaster", SMN.JobID, SMN.Tridisaster, SMN.Deathflare)]
-        SimpleAoESummoner = 1417,
+        SimpleAoESummoner = 1416,
 
         [DependentCombos(SimpleSummoner)] 
         [CustomComboInfo("Searing Light Rotation Option", "Adds Searing Light to Simple Summoner Rotation, Single Target", SMN.JobID, SMN.Ruin3, SMN.SearingLight)]
-        BuffOnSimpleSummoner = 1418,
+        BuffOnSimpleSummoner = 1417,
 
         [DependentCombos(SimpleAoESummoner)]
         [CustomComboInfo("Searing Light  AoE Option", "Adds Searing Light to Simple Summoner Rotation, AoE", SMN.JobID, SMN.Tridisaster, SMN.SearingLight)]
-        BuffOnSimpleAoESummoner = 1419,
+        BuffOnSimpleAoESummoner = 1418,
 
         [CustomComboInfo("DemiReminderFeature", "Adds Only Demi Summons on RuinIII (So you can still choose your Egis but never forget to summon Demis) ", SMN.JobID, SMN.Ruin3, SMN.Deathflare)]
-        SummonerDemiSummonsFeature = 1420,
+        SummonerDemiSummonsFeature = 1419,
 
         [CustomComboInfo("DemiReminderAoEFeature", "Adds Only Demi Summons on TriDisaster (So you can still choose your Egis but never forget to summon Demis) ", SMN.JobID, SMN.Ruin3, SMN.Deathflare)]
-        SummonerDemiAoESummonsFeature = 1421,
+        SummonerDemiAoESummonsFeature = 1420,
 
         [CustomComboInfo("Ruin III mobility", "Allows you to cast Ruin III while Ruin IV is unavailable for mobility reasons. Shows up as Ruin I.\nWill break combos with Ruin I. Might break combos with Ruin IV.", SMN.JobID, SMN.Ruin4)]
-        SummonerRuinIVMobilityFeature = 1422,
+        SummonerRuinIVMobilityFeature = 1421,
 
         [CustomComboInfo("Swiftcast Garuda Option", "Always swiftcasts Slipstream if available.", SMN.JobID, SMN.Ruin3)]
-        SummonerSwiftcastFeatureGaruda = 1423,
+        SummonerSwiftcastFeatureGaruda = 1422,
 
         [CustomComboInfo("Swiftcast Ifrit Option", "Always swiftcasts 2nd Ruby Rite if available.", SMN.JobID, SMN.Ruin3)]
-        SummonerSwiftcastFeatureIfrit = 1424,
+        SummonerSwiftcastFeatureIfrit = 1423,
 
         [ConflictingCombos(SimpleSummoner)]
         [CustomComboInfo("One Button Rotation Feature Option2 ", "Same feature as One Button Rotation Feature but Garua>Titan>Ifrit .", SMN.JobID, SMN.Ruin3)]
-        SimpleSummonerOption2 = 1425,
+        SimpleSummonerOption2 = 1424,
 
-        [CustomComboInfo("Prevent Ruin4 Waste Feature", "Puts Ruin4 Above anything if FurtherRuin about to expire.", SMN.JobID, SMN.Ruin3)]
-        SummonerRuin4WastePrevention = 1426,
+        [CustomComboInfo("Prevent Ruin4 Waste Feature", "Puts Ruin4 Above anything if FurtherRuin about to expire and there is no Demi present.", SMN.JobID, SMN.Ruin3)]
+        SummonerRuin4WastePrevention = 1425,
+
+        [ConflictingCombos(SummonerMainComboFeature)]
+        [CustomComboInfo("Enable Single Target (Ruin1)", "Enables changing Single-Target Combo (Ruin I).", SMN.JobID, SMN.Ruin)]
+        SummonerMainComboFeatureRuin1 = 1426,
 
         #endregion
         // ====================================================================================
@@ -866,6 +932,12 @@ namespace XIVSlothComboPlugin
         [CustomComboInfo("Onslaught Option Two", "Adds Onslaught to Storm's Path feature combo if you are under Surging Tempest Buff (Leaves 1/2 stacks depending on lvl)", WAR.JobID, WAR.StormsPath)]
         WarriorOnslaughtFeatureOptionTwo = 1514,
 
+        [CustomComboInfo("Infuriate Feature", "Replaces Infuriate with FellCleave when under InnerRelease buff. Replaces Infuriate with Inner Chaos When under Nascent Chaos buff", WAR.JobID, WAR.Infuriate)]
+        WarriorInfuriateFeature = 1515,
+
+        [CustomComboInfo("Tomahawk Uptime Feature", "Replace Storm's Path Combo Feature with Tomahawk when you are out of range.", WAR.JobID, WAR.StormsPath)]
+        WARRangedUptimeFeature = 1516,
+
         #endregion
         // ====================================================================================
         #region WHITE MAGE
@@ -886,14 +958,41 @@ namespace XIVSlothComboPlugin
         [CustomComboInfo("WHM Raise Feature", "Changes Swiftcast to Raise", WHM.JobID, WHM.Swiftcast, WHM.Raise)]
         WHMRaiseFeature = 1604,
 
-        [CustomComboInfo("DoT on Glare1/3 Feature", "Adds DoT on Glare1/3 when DoT is not preset on about to expire and when you are inCombat (You can still prepull Glare)", WHM.JobID, WHM.Glare3, WHM.Dia)]
+        [CustomComboInfo("DoT on Glare3 Feature", "Adds DoT on Glare3 when DoT is not preset on about to expire and when you are inCombat (You can still prepull Glare)", WHM.JobID, WHM.Glare3, WHM.Dia)]
         WHMDotMainComboFeature = 1605,
 
+        [DependentCombos(WHMDotMainComboFeature)]
         [CustomComboInfo("Lucid Dreaming Feature", "Adds Lucid dreaming onto Glare1/3 Feature combo when you are below 8k mana", WHM.JobID, WHM.LucidDreaming)]
         WHMLucidDreamingFeature = 1606,
 
         [CustomComboInfo("Medica Feature", "Replaces Medica2 whenever you are under Medica2 regen with Medica1", WHM.JobID, WHM.Medica1, WHM.Medica2)]
         WHMMedicaFeature = 1607,
+
+        [DependentCombos(WHMDotMainComboFeature)]
+        [CustomComboInfo("Presence Of Mind Feature", "Adds Presence of mind as oGCD onto main DPS Feature(Glare3)", WHM.JobID, WHM.Glare3)]
+        WHMPresenceOfMindFeature = 1608,
+
+        [DependentCombos(WHMDotMainComboFeature)]
+        [CustomComboInfo("Assize Feature", "Adds Assize as oGCD onto main DPS Feature(Glare3)", WHM.JobID, WHM.Glare3)]
+        WHMAssizeFeature = 1609,
+
+        [DependentCombos(WHMMedicaFeature)]
+        [CustomComboInfo("Afflatus Misery On Medica Feature", "Adds Afflatus Misery onto the Medica Feature", WHM.JobID, WHM.Medica1, WHM.Medica2)]
+        WhiteMageAfflatusMiseryMedicaFeature = 1610,
+
+        [DependentCombos(WHMMedicaFeature)]
+        [CustomComboInfo("Afflatus Rapture On Medica Feature", "Adds Afflatus Rapture onto the Medica Feature", WHM.JobID, WHM.Medica1, WHM.Medica2)]
+        WhiteMageAfflatusRaptureMedicaFeature = 1611,
+
+        [CustomComboInfo("Afflatus Misery Feature", "Changes Cure 2 into Afflatus Misery.", WHM.JobID, WHM.Cure2)]
+        WhiteMageAfflatusMiseryCure2Feature = 1612,
+
+        [CustomComboInfo("Remove DoT From Glare3 Feature", "Removes DoT from DPS feature", WHM.JobID, WHM.Glare3, WHM.Dia)]
+        WHMRemoveDotFromDPSFeature = 1613,
+
+        [DependentCombos(WHMRaiseFeature)]
+        [CustomComboInfo("Thin Air Raise Feature", "Adds Thin Air to the WHM Raise Feature", WHM.JobID, WHM.Swiftcast, WHM.Raise)]
+        WHMThinAirFeature = 1614,
 
         #endregion
         // ====================================================================================
@@ -970,6 +1069,7 @@ namespace XIVSlothComboPlugin
         [CustomComboInfo("Phlegma into Dyskrasia", "Phlegma turns into Dyskrasia when you are out of charges.", SGE.JobID, SGE.Phlegma, SGE.Phlegmara, SGE.Phlegmaga)]
         SagePhlegmaFeature = 1801,
 
+        [ConflictingCombos(SageDPSFeatureTest)]
         [CustomComboInfo("Dosis Dps Feature", "Adds Eukrasia and Eukrasian dosis on one combo button", SGE.JobID, SGE.Dosis1, SGE.Dosis2, SGE.Dosis3, SGE.Eukrasia, SGE.EukrasianDosis1)]
         SageDPSFeature = 1802,
 
@@ -979,6 +1079,10 @@ namespace XIVSlothComboPlugin
 
         [CustomComboInfo("Lucid Dreaming Feature", "Adds LucidDreaming onto Dosis DPS Feature when you have 8k mana or less", SGE.JobID, SGE.Dosis1, SGE.Dosis2, SGE.Dosis3, SGE.Eukrasia, SGE.EukrasianDosis1)]
         SageLucidFeature = 1804,
+
+        [ConflictingCombos(SageDPSFeature)]
+        [CustomComboInfo("Dosis DPS Feature Testing", "Same function as Above DPS Feature but you can input some values to your liking ", SGE.JobID, SGE.Dosis1, SGE.Dosis2, SGE.Dosis3, SGE.Eukrasia, SGE.EukrasianDosis1)]
+        SageDPSFeatureTest = 1805,
 
         #endregion
         // ====================================================================================
@@ -1051,6 +1155,8 @@ namespace XIVSlothComboPlugin
         [SecretCustomCombo]
         [CustomComboInfo("BlackEnochianPVPFeature", "Enochian Stance Switcher", BLMPVP.JobID, BLMPVP.Enochian)]
         BlackEnochianPVPFeature = 3516,
+
+
         #endregion
     }
 }

@@ -18,6 +18,7 @@ namespace XIVSlothComboPlugin.Combos
             Bladeshower = 15994,
             RisingWindmill = 15995,
             Bloodshower = 15996,
+            Tillana = 25790,
             // Dancing
             StandardStep = 15997,
             TechnicalStep = 15998,
@@ -54,6 +55,7 @@ namespace XIVSlothComboPlugin.Combos
                 FlourishingFlow = 2694,
                 FlourishingFanDance = 1820,
                 FlourishingStarfall = 2700,
+                FlourishingFinish = 2698,
                 ThreeFoldFanDance = 1820,
                 FourFoldFanDance = 2699;
         }
@@ -151,7 +153,6 @@ namespace XIVSlothComboPlugin.Combos
                     return DNC.StandardFinish2;
                 }
             }
-
             if (actionID == DNC.TechnicalStep)
             {
                 var gauge = GetJobGauge<DNCGauge>();
@@ -206,12 +207,12 @@ namespace XIVSlothComboPlugin.Combos
                 var gauge = GetJobGauge<DNCGauge>();
                 var actionIDCD = GetCooldown(actionID);
                 // Espirit Overcap Options
-                if (gauge.Esprit >= 50 && level >= DNC.Levels.SaberDance && IsEnabled(CustomComboPreset.DancerSaberDanceOnMainComboFeature))
+                if (gauge.Esprit >= 50 && level >= DNC.Levels.SaberDance && IsEnabled(CustomComboPreset.DancerSaberDanceInstantSaberDanceComboFeature))
                     return DNC.SaberDance;
                 if (gauge.Esprit >= 90 && level >= DNC.Levels.SaberDance && IsEnabled(CustomComboPreset.DancerOvercapFeature))
                     return DNC.SaberDance;
                 // FanDances
-                if (gauge.Feathers > 0 && actionIDCD.IsCooldown && level >= 30 && IsEnabled(CustomComboPreset.DancerFanDanceOnMainComboFeature))
+                if (gauge.Feathers == 4 && actionIDCD.IsCooldown && level >= 30 && IsEnabled(CustomComboPreset.DancerFanDanceOnMainComboFeature))
                     return DNC.FanDance1;
                 if (HasEffect(DNC.Buffs.ThreeFoldFanDance) && actionIDCD.IsCooldown && level >= 66 && IsEnabled(CustomComboPreset.DancerFanDanceOnMainComboFeature))
                     return DNC.FanDance3;
@@ -244,9 +245,20 @@ namespace XIVSlothComboPlugin.Combos
         {
             if (actionID == DNC.Windmill)
             {
+                var actionIDCD = GetCooldown(actionID);
                 var gauge = GetJobGauge<DNCGauge>();
+                // Espirit Overcap Options
+                if (gauge.Esprit >= 50 && level >= DNC.Levels.SaberDance && IsEnabled(CustomComboPreset.DancerSaberDanceInstantSaberDanceComboFeature))
+                    return DNC.SaberDance;
                 if (gauge.Esprit >= 90 && level >= DNC.Levels.SaberDance && IsEnabled(CustomComboPreset.DancerOvercapFeature))
                     return DNC.SaberDance;
+                // FanDances
+                if (gauge.Feathers == 4 && actionIDCD.IsCooldown && level >= 50 && IsEnabled(CustomComboPreset.DancerFanDanceOnAoEComboFeature))
+                    return DNC.FanDance2;
+                if (HasEffect(DNC.Buffs.ThreeFoldFanDance) && actionIDCD.IsCooldown && level >= 66 && IsEnabled(CustomComboPreset.DancerFanDanceOnAoEComboFeature))
+                    return DNC.FanDance3;
+                if (HasEffect(DNC.Buffs.FourFoldFanDance) && actionIDCD.IsCooldown && level >= 86 && IsEnabled(CustomComboPreset.DancerFanDanceOnAoEComboFeature))
+                    return DNC.FanDance4;
                 // From Bladeshower
                 if (HasEffect(DNC.Buffs.FlourishingFlow))
                     return DNC.Bloodshower;
@@ -294,10 +306,33 @@ namespace XIVSlothComboPlugin.Combos
                 var gauge = GetJobGauge<DNCGauge>();
                 var standardCD = GetCooldown(DNC.StandardStep);
                 var techstepCD = GetCooldown(DNC.TechnicalStep);
+                var devilmentCD = GetCooldown(DNC.Devilment);
+                var flourishCD = GetCooldown(DNC.Flourish);
+                var incombat = HasCondition(Dalamud.Game.ClientState.Conditions.ConditionFlag.InCombat);
+
+                if (IsEnabled(CustomComboPreset.DancerDevilmentOnCombinedDanceFeature))
+                {
+                    if (level >= 62 && level <= 69 && standardCD.IsCooldown && !devilmentCD.IsCooldown && !gauge.IsDancing)
+                        return DNC.Devilment;
+                    if (level >= 70 && standardCD.IsCooldown && techstepCD.IsCooldown && !devilmentCD.IsCooldown && !gauge.IsDancing)
+                        return DNC.Devilment;
+                }
+                if(IsEnabled(CustomComboPreset.DancerFlourishOnCombinedDanceFeature) && !gauge.IsDancing && !flourishCD.IsCooldown && incombat && level >= 72 && standardCD.IsCooldown)
+                {
+                    return DNC.Flourish;
+                }
+                if (HasEffect(DNC.Buffs.FlourishingStarfall))
+                {
+                    return DNC.StarfallDance;
+                }
+                if (HasEffect(DNC.Buffs.FlourishingFinish))
+                {
+                    return DNC.Tillana;
+                }
                 if (standardCD.IsCooldown && !techstepCD.IsCooldown && !gauge.IsDancing && !HasEffect(DNC.Buffs.StandardStep))
                 {
                     return DNC.TechnicalStep;
-                }
+                }                
                 if (gauge.IsDancing && HasEffect(DNC.Buffs.StandardStep))
                 {
                     if (gauge.CompletedSteps < 2)
@@ -305,7 +340,7 @@ namespace XIVSlothComboPlugin.Combos
 
                     return DNC.StandardFinish2;
                 }
-                if (gauge.IsDancing && HasEffect(DNC.Buffs.TechnicalStep) && standardCD.IsCooldown)
+                if (gauge.IsDancing && HasEffect(DNC.Buffs.TechnicalStep))
                 {
                     if (gauge.CompletedSteps < 4)
                         return (uint)gauge.NextStep;

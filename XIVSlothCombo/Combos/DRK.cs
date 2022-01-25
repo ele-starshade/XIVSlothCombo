@@ -24,7 +24,8 @@ namespace XIVSlothComboPlugin.Combos
             LivingShadow = 16472,
             SaltAndDarkness = 25755,
             Shadowbringer = 25757,
-            Plunge = 3640;
+            Plunge = 3640,
+            Unmend = 3624;
 
         public static class Buffs
         {
@@ -83,6 +84,11 @@ namespace XIVSlothComboPlugin.Combos
                 var livingshadowCD = GetCooldown(DRK.LivingShadow);
                 var saltedCD = GetCooldown(DRK.SaltedEarth);
                 var carveCD = GetCooldown(DRK.CarveAndSpit);
+                if(IsEnabled(CustomComboPreset.DarkRangedUptimeFeature) && level >= 15)
+                {
+                    if(!InMeleeRange(true))
+                    return DRK.Unmend;
+                }
                 if (IsEnabled(CustomComboPreset.DeliriumFeature))
                 {
                     if (level >= DRK.Levels.Bloodpiller && level >= DRK.Levels.Delirium && HasEffect(DRK.Buffs.Delirium))
@@ -195,10 +201,12 @@ namespace XIVSlothComboPlugin.Combos
         {
             if (actionID == DRK.CarveAndSpit || actionID == DRK.AbyssalDrain)
             {
+                var shbCD = GetCooldown(DRK.Shadowbringer);
                 var gauge = GetJobGauge<DRKGauge>();
                 var livingshadowCD = GetCooldown(DRK.LivingShadow);
                 var saltedCD = GetCooldown(DRK.SaltedEarth);
                 var actionIDCD = GetCooldown(actionID);
+
                 if (gauge.Blood >= 50 && !livingshadowCD.IsCooldown && level >= 80 )
                     return DRK.LivingShadow;
                 if (!saltedCD.IsCooldown && level >= DRK.Levels.SaltedEarth)
@@ -207,6 +215,9 @@ namespace XIVSlothComboPlugin.Combos
                     return actionID;
                 if (HasEffect(DRK.Buffs.SaltedEarth) && level >= DRK.Levels.SaltAndDarkness)
                     return DRK.SaltAndDarkness;
+                if (IsEnabled(CustomComboPreset.DarkShadowbringeroGCDFeature) && shbCD.CooldownRemaining < 60)
+                    return DRK.Shadowbringer;
+
             }
 
             return OriginalHook(actionID);
