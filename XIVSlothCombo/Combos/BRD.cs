@@ -662,8 +662,8 @@ namespace XIVSlothComboPlugin.Combos
                     }
                 }
 
-                if (IsEnabled(CustomComboPreset.BardSimpleInterrupt) && CanInterruptEnemy() && !GetCooldown(All.HeadGraze).IsCooldown) {
-                    return All.HeadGraze;
+                if (IsEnabled(CustomComboPreset.BardSimpleInterrupt) && CanInterruptEnemy() && !GetCooldown(BRD.HeadGraze).IsCooldown) {
+                    return BRD.HeadGraze;
                 }
 
                 var gauge = GetJobGauge<BRDGauge>();
